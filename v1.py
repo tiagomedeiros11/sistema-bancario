@@ -5,12 +5,17 @@ menu = """
 # [1] - DEPÓSITO          #
 # [2] - SAQUE             #
 # [3] - EXTRATO           #
-# [4] - SAIR              #
-#                         #
+# [4] - CRIAR USUARIO     #
+# [5] - LISTAR USUARIOS   #
+# [6] - SAIR              #
 ###########################
 """
 
 
+saldo = 0
+extrato = ""
+numero_saques = 0
+lista_usuarios = []
 
 def deposito(saldo, valor, extrato,/):
     if valor > 0:        
@@ -45,11 +50,25 @@ def saque(valor,saldo,numero_saques,extrato):
 
     return saldo, extrato, numero_saques
 
+def criar_usuario(nome,data_nascimento,cpf,endereco):
+    usuario = {
+        "nome": nome,
+        "data_nascimento": data_nascimento,
+        "cpf": cpf,
+        "endereço": endereco
+    }
+    return usuario
+    
 
-saldo = 0
-extrato = ""
-numero_saques = 0
-
+def adicionar_usuario_a_lista(usuario):
+    cpf = usuario['cpf']
+    if cpf not in usuario:
+        usuario[cpf] = usuario
+        print("Usuário cadastrado com sucesso!")
+    else:
+        print("Erro: Já existe um usuário com o CPF fornecido.")
+    
+    
 while True:
     opcao = input(menu)
 
@@ -63,20 +82,23 @@ while True:
         
         saldo, extrato, numero_saques = saque(valor,saldo,numero_saques,extrato)
         
-
     elif opcao == "3":
         exibir_extrato(saldo, extrato=extrato)
 
     elif opcao == "4":
+        nome = str(input("Digite seu nome: "))
+        data_nascimento = (input("Digite a data de nascimento (DD/MM/AAAA): "))
+        cpf = input("Digite o CPF: ")
+        endereco = input("Digite o endereço: ")
+
+        usuario_cadastrado = criar_usuario(nome,data_nascimento,cpf,endereco)
+        lista_usuarios = adicionar_usuario_a_lista(usuario_cadastrado)
+        
+        
+    elif opcao == "6":
         print("Obrigado por usar essa bosta!")
         break
     
     else:
         print("Opção inválida, selecione novamente a operação desejada")
-
-        
-
-
-
-
 
