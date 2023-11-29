@@ -6,7 +6,6 @@ menu = """
 # [2] - SAQUE             #
 # [3] - EXTRATO           #
 # [4] - CRIAR USUARIO     #
-# [5] - LISTAR USUARIOS   #
 # [6] - SAIR              #
 ###########################
 """
@@ -60,13 +59,16 @@ def criar_usuario(nome,data_nascimento,cpf,endereco):
     return usuario
     
 
-def adicionar_usuario_a_lista(usuario):
+def adicionar_usuario_a_lista(usuario, lista_usuarios):
+    '''Função para adicionar os usuários cadastrados na lista de usuários'''
     cpf = usuario['cpf']
-    if cpf not in usuario:
-        usuario[cpf] = usuario
+    if cpf not in [u['cpf'] for u in lista_usuarios]:
+        lista_usuarios.append(usuario)
         print("Usuário cadastrado com sucesso!")
     else:
         print("Erro: Já existe um usuário com o CPF fornecido.")
+
+    return lista_usuarios    
     
     
 while True:
@@ -92,10 +94,10 @@ while True:
         endereco = input("Digite o endereço: ")
 
         usuario_cadastrado = criar_usuario(nome,data_nascimento,cpf,endereco)
-        lista_usuarios = adicionar_usuario_a_lista(usuario_cadastrado)
+        lista_usuarios = adicionar_usuario_a_lista(usuario_cadastrado,lista_usuarios)
         
         
-    elif opcao == "6":
+    elif opcao == "5":
         print("Obrigado por usar essa bosta!")
         break
     
