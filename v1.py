@@ -6,7 +6,9 @@ menu = """
 # [2] - SAQUE             #
 # [3] - EXTRATO           #
 # [4] - CRIAR USUARIO     #
-# [6] - SAIR              #
+# [5] - CRIAR CONTA       #
+# [6] - LISTAR CONTA      #
+# [7] - SAIR              #
 ###########################
 """
 
@@ -15,6 +17,8 @@ saldo = 0
 extrato = ""
 numero_saques = 0
 lista_usuarios = []
+AGENCIA = "0001"
+contas = []
 
 def deposito(saldo, valor, extrato,/):
     if valor > 0:        
@@ -58,6 +62,9 @@ def criar_usuario(nome,data_nascimento,cpf,endereco):
     }
     return usuario
     
+def filtrar_usuario(lista, cpf):
+    '''Função para verificar se existe usuario com o cpf inserido, baseado em uma lista de dicionarios'''
+    return [d for d in lista if d.get("cpf") == cpf]
 
 def adicionar_usuario_a_lista(usuario, lista_usuarios):
     '''Função para adicionar os usuários cadastrados na lista de usuários'''
@@ -70,7 +77,30 @@ def adicionar_usuario_a_lista(usuario, lista_usuarios):
 
     return lista_usuarios    
     
+
+def criar_conta(agencia, numero_da_conta, lista_usuarios):
+    cpf = input("Digite seu CPF: ")
+    usuario = filtrar_usuario(lista_usuarios, cpf)
+
+    if usuario:
+        print("Conta criada com sucesso")
+        return {"agencia": agencia, "numero_da_conta": numero_da_conta, "usuario": usuario[0]}
     
+    print("Usuário não encontrado, encerrando o cadastro da conta")
+
+def listar_contas(contas):
+    
+    for conta in contas:
+       titular = conta['usuario']['nome']
+       linha = f""" 
+    Agencia: {conta['agencia']}
+    CC: {conta['numero_da_conta']}
+    Titular da conta: {conta['usuario']['nome']}
+        """
+       print(linha)
+
+
+
 while True:
     opcao = input(menu)
 
@@ -96,8 +126,18 @@ while True:
         usuario_cadastrado = criar_usuario(nome,data_nascimento,cpf,endereco)
         lista_usuarios = adicionar_usuario_a_lista(usuario_cadastrado,lista_usuarios)
         
-        
     elif opcao == "5":
+        numero_conta = len(contas) + 1 
+        conta = criar_conta(AGENCIA, numero_conta, lista_usuarios)
+
+        if conta:
+            contas.append(conta) 
+        
+    elif opcao == "6":
+        listar_contas(contas)
+        
+
+    elif opcao == "7":
         print("Obrigado por usar essa bosta!")
         break
     
