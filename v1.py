@@ -91,7 +91,6 @@ def criar_conta(agencia, numero_da_conta, lista_usuarios):
 def listar_contas(contas):
     
     for conta in contas:
-       titular = conta['usuario']['nome']
        linha = f""" 
     Agencia: {conta['agencia']}
     CC: {conta['numero_da_conta']}
